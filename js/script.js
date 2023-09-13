@@ -1,23 +1,27 @@
 // global variable to select the div with the class of ".overview"
 const profileInfo = document.querySelector(".overview");
-
+// global variable for the repo list
+const repoList = document.querySelector(".repo-list");
+// GitHub username
 const username = "EugenFM";
+
 
 // async function to fetch info from GitHub profile
 const githubApiInfo = async function () {
     const response = await fetch(`https://api.github.com/users/${username}`);
     const data = await response.json();
     // console.log(data);
-    displayInfo(data);
+    displayUserInfo(data);
 }
 githubApiInfo();
 
+
 // function to display the fetched user information
-const displayInfo = async function (data) {
+const displayUserInfo = async function (data) {
     let newDiv = document.createElement("div");
     newDiv.classList.add("user-info");
-    newDiv.innerHTML = 
-    `<figure>  
+    newDiv.innerHTML =
+        `<figure>  
          <img alt="user avatar" src=${data.avatar_url} />
     </figure>
     <div>
@@ -28,5 +32,25 @@ const displayInfo = async function (data) {
     </div>`;
 
     profileInfo.append(newDiv);
+    displayRepoInfo();
 }
 
+
+// async function to fetch the GitHub repos
+const fetchRepos = async function () {
+    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=created&?per_page=100`);
+    const repos = await response.json();
+    // console.log(repos)
+    displayRepoInfo(repos);
+}
+fetchRepos();
+
+// function to display info about each repo
+const displayRepoInfo = function (repos) {
+    for (const repo of repos) {
+        let listItem = document.createElement("li");
+        listItem.classList.add("repo");
+        listItem.innerHTML = `<h3>${repo.name}</h3>`;
+        repoList.append(listItem);
+    }
+}
