@@ -32,7 +32,7 @@ const displayUserInfo = async function (data) {
     </div>`;
 
     profileInfo.append(newDiv);
-    displayRepoInfo();
+    fetchRepos();
 }
 
 
@@ -43,7 +43,7 @@ const fetchRepos = async function () {
     // console.log(repos)
     displayRepoInfo(repos);
 }
-fetchRepos();
+
 
 // function to display info about each repo
 const displayRepoInfo = function (repos) {
