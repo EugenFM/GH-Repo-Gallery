@@ -10,8 +10,11 @@ const username = "EugenFM";
 const reposSection = document.querySelector(".repos");
 // selects the section with a class of "repo-data"
 const repoData = document.querySelector(".repo-data");
-
-
+// targets the back to the repos button
+const backButton = document.querySelector(".view-repos")
+// selects the input with the "Search by name" placeholder
+const filterInput = document.querySelector(".filter-repos");
+ 
 
 
 // async function to fetch info from GitHub profile
@@ -46,6 +49,7 @@ const displayUserInfo = async function (data) {
 
 // async function to fetch the GitHub repos
 const fetchRepos = async function () {
+    filterInput.classList.remove("hide");
     const response = await fetch(`https://api.github.com/users/${username}/repos?sort=created&?per_page=100`);
     const repos = await response.json();
     // console.log(repos)
@@ -106,4 +110,31 @@ const displayRepoInfo = async function (repoInfo, languages) {
     repoData.append(newRepoDiv);
     repoData.classList.remove("hide");
     reposSection.classList.add("hide");
+    backButton.classList.remove("hide");
     }
+
+    // event listener for the back to the repos button
+    backButton.addEventListener("click", function () {
+        reposSection.classList.remove("hide");
+        repoData.classList.add("hide");
+        backButton.classList.add("hide");
+
+    })
+
+    // Add an input event to the search box
+    filterInput.addEventListener("input", function (e) {
+        const inputText = e.target.value;
+        // console.log(inputText);
+        const repos = document.querySelectorAll(".repo");
+        const lowerCaseInput = inputText.toLowerCase();
+
+        // loop through the repos to match with the search text
+        for (const repo of repos) {
+            const lowerCaseRepoText = repo.innerText.toLowerCase();
+            if (lowerCaseRepoText.includes(lowerCaseInput)) {
+                repo.classList.remove("hide");
+            } else {
+                repo.classList.add("hide");
+            }
+        }
+    });
